@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "Name is required"],
       trim: true,
       minlength: [2, "name must be at least 2 character"],
-      minlength: [100, "name cannot exceed 100 character"],
+      maxlength: [100, "name cannot exceed 100 character"],
     },
     email: {
       type: String,
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: Object.values(USER_STATUS),
-      default: [USER_STATUS.ACTIVE],
+      default: USER_STATUS.ACTIVE,
       index: true,
     },
     isEmailVerified: {
