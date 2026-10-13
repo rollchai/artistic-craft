@@ -4,7 +4,7 @@ const jwt=require("jsonwebtoken")
 const generateJwtToken=(user)=>{
     return jwt.sign(
         {
-            sub:user._id.tostring(),
+            sub:user._id.toString(),
             role:user.role
         },
         env.jwt.accessSecret,
@@ -16,7 +16,7 @@ const generateJwtToken=(user)=>{
 const generateRefreshtoken=(user)=>{
       return jwt.sign(
         {
-            sub:user._id.tostring(),
+            sub:user._id.toString(),
             role:user.role
         },
         env.jwt.refreshSecret,

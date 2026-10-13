@@ -13,6 +13,20 @@ const register = async (req, res, next) => {
     next(error);
   }
 };
+
+const login = async (req, res, next) => {
+  try {
+    const loginuser = await authService.loginUser(req.body);
+    return res.status(201).json({
+      success: true,
+      message: "user login successfully",
+      data: { loginuser },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   register,
+  login
 };

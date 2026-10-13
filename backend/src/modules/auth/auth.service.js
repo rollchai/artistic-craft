@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../users/user.model");
+const { generateJwtToken, generateRefreshtoken } = require("../../utils/jwt");
 const registeUser = async ({ name, email, password }) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -30,9 +31,36 @@ const loginUser = async ({ email, password }) => {
 
     throw error;
   }
-  const isPasswordValid=await bcrypt
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    const error = new Error("invalid email and password");
+    error.statusCode = 401;
+    throw error;
+  }
+  if (user.status !== "active") {
+    const error = new Error("user status should be active");
+    error.statusCode = 403;
+    throw error;
+  }
+  user.lastLoginAt = new Date();
+  await user.save();
+  const accessToken = generateJwtToken(user);
+  const refreshToken = generateRefreshtoken(user);
+  return {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+      isEmailVerified: user.isEmailVerified,
+    },
+    accessToken,
+    refreshToken,
+  };
 };
 
 module.exports = {
   registeUser,
+  loginUser
 };
