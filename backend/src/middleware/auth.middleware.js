@@ -61,4 +61,22 @@ const authenticate = async (req, res, next) => {
   next(error);
  }
 }
-module.exports = authenticate;
+// authroization middleware
+const authorize=(...allowedRoles)=>{
+ return (req,res,next)=>{
+  if(!req.user){
+   return res.status(401).json({
+    success:false,
+    message:"Authentication required"
+   })
+  }
+  if(!allowedRoles.includes(req.user.role)){
+   return res.status(403).json({
+    success:false,
+    message:"you do not have permission to access this resources"
+   })
+  }
+  next()
+ }
+}
+module.exports = {authenticate,authorize};
