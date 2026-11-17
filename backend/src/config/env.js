@@ -7,6 +7,7 @@ const requiredVariables = [
   "MONGO_URI",
   "JWT_ACCESS_SECRET",
   "JWT_REFRESH_SECRET",
+  "REDIS_URL",
 ];
 
 for (const variable of requiredVariables) {
@@ -18,7 +19,12 @@ const env = {
   NODE_ENV: process.env.NODE_ENV,
   port: Number(process.env.PORT) || 5000,
   mongoUri: process.env.MONGO_URI,
+  redisUrl: process.env.REDIS_URL,
   frontendUrl: process.env.FRONTEND_URL,
+  refreshTokenTtlSeconds:
+    Number(process.env.REFRESH_TOKEN_TTL_SECONDS) || 604800,
+  refreshSessionMaxAgeSeconds:
+    Number(process.env.REFRESH_SESSION_MAX_AGE_SECONDS) || 2592000,
 
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET,
